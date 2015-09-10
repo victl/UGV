@@ -14,11 +14,11 @@ Range::Range(const Carpose &currentPose, const UgvParam &param)
 {
     left = floor((currentPose.x + params.Scale.xMin) / params.Scale.GridSize)
             * params.Scale.GridSize;
-    right = ceil((currentPose.x + params.Scale.xMax) / params.Scale.GridSize)
+    right = floor((currentPose.x + params.Scale.xMax) / params.Scale.GridSize)
             * params.Scale.GridSize;
     bottom = floor((currentPose.y + params.Scale.xMin) / params.Scale.GridSize)
             * params.Scale.GridSize;
-    top = ceil((currentPose.y + params.Scale.xMax) / params.Scale.GridSize)
+    top = floor((currentPose.y + params.Scale.xMax) / params.Scale.GridSize)
             * params.Scale.GridSize;
     update();
 }
