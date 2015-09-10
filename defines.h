@@ -18,6 +18,7 @@
 //define some constant
 #define ANGLE_NUM 36000 //divide the whole 360 degree to small pieces
 #define LASER_NUM 64    //the total num of laser beam from the ladar is 64
+#define MAX_CLOUD_NUM 256000    //maximum possible point number
 
 //struct used to store raw hdl data
 typedef struct

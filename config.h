@@ -13,15 +13,29 @@
 
 #include <string>
 #include <set>
+#include <map>
+
+//this enum is not used for the moment, because using them is so tiring!!!
+enum Parameter : unsigned char {
+    CONFIGFILE, CORRECTIONFILE
+    , EULRCHANGETHRESHOLD, DETECTPOINTS, DETECTDISTANCE, VALIDSEGMENTPOINTSNUM
+    , SIMILAREULRTHRESHOLD
+    , SAMEDIRECTIONTHRESHOLD, LATERALDISTANCETHRESHOLD
+    , XMIN, XMAX, YMIN, YMAX, GRIDSIZE, PIXELPERGRID, WIDTH, XSCALE, YSCALE
+    , LEFTDETECTANGLEBOUNDARY, RIGHTDETECTANGLEBOUNDARY, UNITHEIGHT, HEIGHTTHRESHOLD, INCREMENTUNIT
+    , OCCUPIEDTHRESHOLD, CLEARTHRESHOLD, MAXGROUNDHEIGHT, MAXAVGMIDDIFF
+    , INITIALWIDTH, INITIALHEIGHT, EXPANDUNIT, SAVEINTERVAL, SAVENEEDED
+};
 
 class UgvParam {
 public:
-    UgvParam(){
+    UgvParam()
+    {
         restoreDefault();
         loadParam();
     }
 
-    bool loadParam(std::string configFile = "/home/victor/workspace/qt/ugv-share/ugv.conf");
+    bool loadParam(std::string configFile = "/home/victor/workspace/zoulu/ugv-share/ugv.conf");
     void restoreDefault();
     //Because many params were calculated by other params. Every time other params alterred,
     //invoking update() to set calculated value is required.
@@ -30,6 +44,11 @@ public:
 
 
 private:
+//Ugv
+    struct Ugv_t {
+        std::string CorrectionFile;
+    };
+
 //DivideCarTrack
     struct DivideCarTrack_t {
         double EulrChangeThreshold;
@@ -88,12 +107,13 @@ private:
     struct LocalMap_t {
         unsigned int initialWidth;
         unsigned int initialHeight;
-        unsigned short incrementUnit;
+        unsigned short ExpandUnit;
         unsigned int SaveInterval;
         std::set<unsigned int> SaveNeeded;
     };
 
 public:
+    struct Ugv_t Ugv;
     struct DivideCarTrack_t DivideCarTrack;
     struct LineParallel_t LineParallel;
     struct SameSeg_t SameSeg;

@@ -25,7 +25,7 @@ Range::Range(const Carpose &currentPose, const UgvParam &param)
 
 bool Range::contains(double x, double y)
 {
-    if(x < left || x > right || y < bottom || y > top)
+    if(x < left || x >= right || y < bottom || y >= top)
     {
         return false;
     }
@@ -90,13 +90,13 @@ Grid_t &Grid_t::operator+=(const Grid_t &other)
     }
     this->highest < other.highest ? this->highest = other.highest : 0;
     this->lowest > other.lowest ? this->lowest = other.lowest : 0;
-    if (this->pointNum + other.pointNum == 0)
-    {
-        this->average = 0;
-    }
-    else{
-        this->average = (this->average * this->pointNum + other.average * other.pointNum) / (this->pointNum + other.pointNum);
-    }
+//    if (this->pointNum + other.pointNum == 0)
+//    {
+//        this->average = 0;
+//    }
+//    else{
+//        this->average = (this->average * this->pointNum + other.average * other.pointNum) / (this->pointNum + other.pointNum);
+//    }
     this->pointNum += other.pointNum;
     this->HitCount += other.HitCount;
     return *this;

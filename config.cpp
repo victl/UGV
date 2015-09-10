@@ -7,6 +7,11 @@
 bool UgvParam::loadParam(std::string configFile)
 {
     std::ifstream in(configFile);
+    if(!in)
+    {
+        DLOG(FATAL) << "Couldn't find configuration file: " << configFile;
+        return false;
+    }
     std::string line;
     std::string key;
     double value;
@@ -83,6 +88,8 @@ bool UgvParam::loadParam(std::string configFile)
 
 void UgvParam::restoreDefault()
 {
+    //Ugv
+    Ugv.CorrectionFile = "new_xml.txt";
     //DivideCarTrack
     DivideCarTrack.EulrChangeThreshold = 0.005;
     DivideCarTrack.DetectPoints = 10;
@@ -133,5 +140,5 @@ void UgvParam::update()
     // n times of Scale.Width
     LocalMap.initialHeight = 3 * Scale.Width;
     LocalMap.initialWidth = 3 * Scale.Width;
-    LocalMap.incrementUnit = 3 * (Scale.xMax - Scale.xMin);
+    LocalMap.ExpandUnit = 3 * (Scale.xMax - Scale.xMin);
 }
