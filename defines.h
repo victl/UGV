@@ -44,7 +44,7 @@ typedef struct{
 
 //NOTE: "unsigned char" for enum is a new feature introduced in c++11 standard
 //so you have to enable c++11 support of compilers.
-enum PointType : unsigned char {
+enum PointType /*: unsigned char */{
     LANELINE = 254,
     ZEBRA = 253,
     INTERSECTION = 3,
@@ -62,7 +62,7 @@ enum PointType : unsigned char {
     UNKNOWN = 127, //'BLANK' means no specific type. Blank point on road should turn into 'CLEAR' point before '3b map file' output
 };
 
-enum MapType : unsigned char {
+enum MapType /*: unsigned char*/ {
     DYNAMICMAP,//dynamic map
     ACCUMMAP,//accumulated map
     LOCALMAP,//local map
@@ -154,6 +154,9 @@ public/*function member*/:
     //THIS IS VERY IMPORTANT!!!
     bool update();
 };
+
+//Global functions
+std::string to_string(int num);
 
 
 //define binary values of Point3B.base

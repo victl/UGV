@@ -16,7 +16,7 @@
 #include <map>
 
 //this enum is not used for the moment, because using them is so tiring!!!
-enum Parameter : unsigned char {
+enum Parameter/* : unsigned char */{
     CONFIGFILE, CORRECTIONFILE
     , EULRCHANGETHRESHOLD, DETECTPOINTS, DETECTDISTANCE, VALIDSEGMENTPOINTSNUM
     , SIMILAREULRTHRESHOLD

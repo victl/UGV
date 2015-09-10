@@ -6,7 +6,7 @@
 
 bool UgvParam::loadParam(std::string configFile)
 {
-    std::ifstream in(configFile);
+    std::ifstream in(configFile.c_str());
     if(!in)
     {
         DLOG(FATAL) << "Couldn't find configuration file: " << configFile;

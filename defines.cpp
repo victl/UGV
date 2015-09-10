@@ -101,3 +101,10 @@ Grid_t &Grid_t::operator+=(const Grid_t &other)
     this->HitCount += other.HitCount;
     return *this;
 }
+
+std::string to_string(int num)
+{
+    char str[10];
+    sprintf(str,"%d", num);
+    return std::string(str);
+}
