@@ -15,6 +15,8 @@
 #ifndef DEFINES_H
 #define DEFINES_H
 
+namespace victl {
+
 //define some constant
 #define ANGLE_NUM 36000 //divide the whole 360 degree to small pieces
 #define LASER_NUM 64    //the total num of laser beam from the ladar is 64
@@ -35,10 +37,25 @@ typedef struct{
     int z;
 }HdlPointXYZ;
 
+//The 'LPoint_t' is used for record native HDL points
+//Currently, only use it when recording data online (on car) - until 2015-9-10
+typedef struct
+{
+    int x;
+    int y;
+    int z;
+    unsigned short distance;
+    unsigned short rotAngle;  // ��ת��
+    unsigned char intensity;     // ǿ����Ϣ
+    unsigned char beamId;     // ɨ��������
+}HdlPoint;
+
 typedef struct{
     double x;
     double y;
-    float eulr;
+    double roll;
+    double pitch;
+    double eulr;
 }Carpose;
 
 
@@ -205,6 +222,6 @@ static const unsigned char LAMP_ARROW = 128;
 static const unsigned char LAMP_GROUND = 192;
 //the definition of traffic sign is uncertain for the moment, to be added in the future
 
-
+}//end namespace victl
 #endif // DEFINES_H
 

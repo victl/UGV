@@ -4,6 +4,8 @@
 #include <iostream>
 #include <glog/logging.h>
 
+namespace victl {
+
 bool UgvParam::loadParam(std::string configFile)
 {
     std::ifstream in(configFile.c_str());
@@ -90,6 +92,7 @@ void UgvParam::restoreDefault()
 {
     //Ugv
     Ugv.CorrectionFile = "new_xml.txt";
+    Ugv.OldHdlFormat = true;
     //DivideCarTrack
     DivideCarTrack.EulrChangeThreshold = 0.005;
     DivideCarTrack.DetectPoints = 10;
@@ -142,3 +145,4 @@ void UgvParam::update()
     LocalMap.initialWidth = 3 * Scale.Width;
     LocalMap.ExpandUnit = 3 * (Scale.xMax - Scale.xMin);
 }
+}//end namespace victl

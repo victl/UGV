@@ -1,6 +1,7 @@
 #include "defines.h"
 #include <cmath>
 
+namespace victl {
 
 Range::Range(const UgvParam& param)
     : params(param)
@@ -15,11 +16,11 @@ Range::Range(const Carpose &currentPose, const UgvParam &param)
     left = floor((currentPose.x + params.Scale.xMin) / params.Scale.GridSize)
             * params.Scale.GridSize;
     right = floor((currentPose.x + params.Scale.xMax) / params.Scale.GridSize)
-            * params.Scale.GridSize;
+            * params.Scale.GridSize + params.Scale.GridSize;
     bottom = floor((currentPose.y + params.Scale.xMin) / params.Scale.GridSize)
             * params.Scale.GridSize;
     top = floor((currentPose.y + params.Scale.xMax) / params.Scale.GridSize)
-            * params.Scale.GridSize;
+            * params.Scale.GridSize + params.Scale.GridSize;
     update();
 }
 
@@ -76,8 +77,8 @@ Range &Range::operator=(const Range &source)
 
 bool Range::update()
 {
-    maxX = (right - left) / params.Scale.GridSize;
-    maxY = (top - bottom) / params.Scale.GridSize;
+    maxX = round((right - left) / params.Scale.GridSize);
+    maxY = round((top - bottom) / params.Scale.GridSize);
     return true;
 }
 
@@ -108,3 +109,4 @@ std::string to_string(int num)
     sprintf(str,"%d", num);
     return std::string(str);
 }
+}//end namespace victl

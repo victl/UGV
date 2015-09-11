@@ -15,6 +15,8 @@
 #include <set>
 #include <map>
 
+namespace victl {
+
 //this enum is not used for the moment, because using them is so tiring!!!
 enum Parameter/* : unsigned char */{
     CONFIGFILE, CORRECTIONFILE
@@ -47,6 +49,7 @@ private:
 //Ugv
     struct Ugv_t {
         std::string CorrectionFile;
+        bool OldHdlFormat;
     };
 
 //DivideCarTrack
@@ -121,5 +124,5 @@ public:
     struct ProbMap_t ProbMap;
     struct LocalMap_t LocalMap;
 };
-
+}//end namespace victl
 #endif // CONFIG_H
