@@ -2,6 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <cmath>
 #include <glog/logging.h>
 
 namespace victl {
@@ -24,7 +25,9 @@ bool UgvParam::loadParam(std::string configFile)
         if(key[0] == '#')
             continue;
         ss >> value;
-        if(key == "EulrChangeThreshold")
+        if(key == "RecordLocalMap")
+            Hdl.RecordLocalMap = round(value);
+        else if(key == "EulrChangeThreshold")
             DivideCarTrack.EulrChangeThreshold = value;
         else if(key == "DetectPoints")
             DivideCarTrack.DetectPoints = value;
@@ -77,7 +80,7 @@ bool UgvParam::loadParam(std::string configFile)
             LocalMap.SaveInterval = value;
         //final case: unknown param:
         else{
-            DLOG(FATAL) << "Error while reading configuration file: " << configFile;
+            DLOG(INFO) << "Error while reading configuration file: " << configFile;
             DLOG(FATAL) << "Unknown paramter: " << key <<", value: " << value;
             in.close();
             return false;
@@ -92,7 +95,11 @@ void UgvParam::restoreDefault()
 {
     //Ugv
     Ugv.CorrectionFile = "new_xml.txt";
-    Ugv.OldHdlFormat = true;
+
+    //Hdl
+    Hdl.HdlVersion = 2;
+    Hdl.MaxCP = 500;
+    Hdl.RecordLocalMap = true;
     //DivideCarTrack
     DivideCarTrack.EulrChangeThreshold = 0.005;
     DivideCarTrack.DetectPoints = 10;

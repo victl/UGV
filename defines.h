@@ -56,12 +56,19 @@ typedef struct{
     double roll;
     double pitch;
     double eulr;
+    double speed;
 }Carpose;
+
+typedef struct {
+    double x;
+    double y;
+    double eulr;
+}SimpleCarpose;
 
 
 //NOTE: "unsigned char" for enum is a new feature introduced in c++11 standard
 //so you have to enable c++11 support of compilers.
-enum PointType /*: unsigned char */{
+enum PointAttrib /*: unsigned char */{
     LANELINE = 254,
     ZEBRA = 253,
     INTERSECTION = 3,
@@ -74,9 +81,16 @@ enum PointType /*: unsigned char */{
     TRAFFICSIGN = 255,
     DOTTEDLANELINE = 251,
     SOLIDLANELINE = 250,
-    CLEAR = 249, //'CLEAR' means point could pass trough
+    CAMERALANELINE = 249,
+    CAMERASTOPLINE = 248,
+    CAMERALSINTERSECT = 247, //intersection of camera laneline and stopline. This info might be useful for Wangshy
+    AUNKNOWN = 127, // Attribute unknown
+};
+
+enum PointOccupation /*: unsigned char */{
+    CLEAR = 255,//'CLEAR' means point could pass trough
     OCCUPIED = 0,
-    UNKNOWN = 127, //'BLANK' means no specific type. Blank point on road should turn into 'CLEAR' point before '3b map file' output
+    OUNKNOWN = 127, // Occupation unknown
 };
 
 enum MapType /*: unsigned char*/ {
@@ -115,17 +129,20 @@ typedef struct Grid_t{
     //how many points in the grid
     unsigned short pointNum;
     unsigned char HitCount;
-    //type. including occupation and other properties
-    PointType type;
+    //occupation
+    PointOccupation o;
+    //attribute
+    PointAttrib a;
 
     Grid_t(){
         p = 0.5;
         highest = 0;
         lowest = 0;
-        average = 0;//tesing
+        average = 0;//testing
         pointNum = 0;
         HitCount = 0;
-        type = UNKNOWN;
+        o = OUNKNOWN;
+        a = AUNKNOWN;
     }
 
     Grid_t &operator+=(const Grid_t& other);
@@ -144,25 +161,24 @@ public/*data member*/:
     double top;
     double left;
     double right;
-    unsigned short maxX;
-    unsigned short maxY;
+    int maxX;
+    int maxY;
 
 public/*function member*/:
     //if point (x,y) didn't fall into the range, return false
     inline bool contains(double x, double y);
 
     //translate global coordinate to local coordinate (origin at bottom-left corner of the range)
-    //NOTE: the function changes x and y directly as they are passed as reference,
     //It returns false if the point fall outside the range
-    bool toLocal(double &x, double &y);
+    bool toLocal(const double x, const double y, int &retX, int &retY);
 
-    //translate local coordinate to global. Unlike toLocal(), this function leave x,y untouched (pass by value)
+    //translate local coordinate to global.
     //and returns the result coordinate as a cv::Point2d.
     //NOTE: grid's global position is on its mid-center
-    cv::Point2d toGlobal(unsigned short x, unsigned short y);
+    cv::Point2d toGlobal(int x, int y);
 
     //translate (x,y) to another range 'other'. values is return by oldx, oldy. if (x,y) does not fall in oldRange, return false
-    bool translate(unsigned short x, unsigned short y, Range& oldRange, unsigned short& oldx, unsigned short& oldy);
+    bool translate(int x, int y, Range& oldRange, int& oldx, int& oldy);
 
     //copy assignment operator
     Range &operator=(const Range& source);
@@ -174,7 +190,7 @@ public/*function member*/:
 
 //Global functions
 std::string to_string(int num);
-
+bool isPresent(unsigned char value, unsigned char property);
 
 //define binary values of Point3B.base
 static const unsigned char ROADEDGE_UNKNOWN = 0;
@@ -190,8 +206,10 @@ static const unsigned char OBSTACLE_CAR = 40;
 static const unsigned char OBSTACLE_BUS = 48;
 static const unsigned char OBSTACLE_TRUCK = 56;
 static const unsigned char LANELINE_NONE = 0;
-static const unsigned char LANELINE_DOTTED = 2;
-static const unsigned char LANELINE_SOLID = 4;
+//static const unsigned char LANELINE_DOTTED = 2;
+static const unsigned char LANELINE_HDL = 2;
+//static const unsigned char LANELINE_SOLID = 4;
+static const unsigned char LANELINE_CAMERA = 4;
 static const unsigned char LANELINE_DOUBLE = 6;
 static const unsigned char STOPLINE_NO = 0;
 static const unsigned char STOPLINE_YES = 1;

@@ -19,7 +19,7 @@ namespace victl {
 
 //this enum is not used for the moment, because using them is so tiring!!!
 enum Parameter/* : unsigned char */{
-    CONFIGFILE, CORRECTIONFILE
+    CORRECTIONFILE, HDLFORMAT
     , EULRCHANGETHRESHOLD, DETECTPOINTS, DETECTDISTANCE, VALIDSEGMENTPOINTSNUM
     , SIMILAREULRTHRESHOLD
     , SAMEDIRECTIONTHRESHOLD, LATERALDISTANCETHRESHOLD
@@ -49,7 +49,15 @@ private:
 //Ugv
     struct Ugv_t {
         std::string CorrectionFile;
-        bool OldHdlFormat;
+    };
+    struct Hdl_t {
+        //Version 1: points doesn't contain xyzs
+        //Version 2: points contain xyzs, car coordinate. Since version 2, camera points were added.
+        //Version 3: points contain xyzs, global coordinate
+        unsigned char HdlVersion;
+        //maximum camera points
+        unsigned short MaxCP;
+        bool RecordLocalMap;
     };
 
 //DivideCarTrack
@@ -117,6 +125,7 @@ private:
 
 public:
     struct Ugv_t Ugv;
+    struct Hdl_t Hdl;
     struct DivideCarTrack_t DivideCarTrack;
     struct LineParallel_t LineParallel;
     struct SameSeg_t SameSeg;

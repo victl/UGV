@@ -33,32 +33,30 @@ bool Range::contains(double x, double y)
     return true;
 }
 
-bool Range::toLocal(double &x, double &y)
+bool Range::toLocal(const double x, const double y, int &retX, int &retY)
 {
     if(!this->contains(x,y))
     {
         return false;
     }
-    x = floor( (x - left) / params.Scale.GridSize);
-    if(x == maxX) --x;
-    y = floor( (y - bottom) / params.Scale.GridSize);
-    if(y == maxY) --y;
+    retX = floor( (x - left) / params.Scale.GridSize);
+    if(retX == maxX) --retX;
+    retY = floor( (y - bottom) / params.Scale.GridSize);
+    if(retY == maxY) --retY;
     return true;
 }
 
-cv::Point2d Range::toGlobal(unsigned short x, unsigned short y)
+cv::Point2d Range::toGlobal(int x, int y)
 {
     double xx = left + (x + 0.5) * params.Scale.GridSize;
     double yy = bottom + (y + 0.5) * params.Scale.GridSize;
     return cv::Point2d(xx, yy);
 }
 
-bool Range::translate(unsigned short x, unsigned short y, Range &oldRange, unsigned short& oldx, unsigned short& oldy)
+bool Range::translate(int x, int y, Range &oldRange,int& oldx, int& oldy)
 {
     cv::Point2d pt = this->toGlobal(x,y);
-    if(oldRange.toLocal(pt.x, pt.y)){
-        oldx = pt.x;
-        oldy = pt.y;
+    if(oldRange.toLocal(pt.x, pt.y, oldx, oldy)){
         return true;
     }
     return false;
@@ -100,6 +98,24 @@ Grid_t &Grid_t::operator+=(const Grid_t &other)
 //    }
     this->pointNum += other.pointNum;
     this->HitCount += other.HitCount;
+
+    switch (this->a) {
+    case AUNKNOWN:
+        this->a = other.a;
+        break;
+    case CAMERALANELINE:
+        if (CAMERASTOPLINE == other.a) this->a = CAMERALSINTERSECT;
+        break;
+    case CAMERASTOPLINE:
+        if (CAMERALANELINE == other.a) this->a = CAMERALSINTERSECT;
+        break;
+    default:
+        break;
+    }
+    if(this->o == OUNKNOWN)
+    {
+        this->o = other.o;
+    }
     return *this;
 }
 
@@ -109,4 +125,10 @@ std::string to_string(int num)
     sprintf(str,"%d", num);
     return std::string(str);
 }
+
+bool isPresent(unsigned char value, unsigned char property)
+{
+    return ((value & property) == property);
+}
+
 }//end namespace victl
