@@ -37,7 +37,7 @@ public:
         loadParam();
     }
 
-    bool loadParam(std::string configFile = "/home/victor/workspace/zoulu/ugv-share/ugv.conf");
+    bool loadParam(std::string configFile = "/home/denggroup/UGV/bin/ugv.conf");
     void restoreDefault();
     //Because many params were calculated by other params. Every time other params alterred,
     //invoking update() to set calculated value is required.

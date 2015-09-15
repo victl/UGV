@@ -94,7 +94,7 @@ bool UgvParam::loadParam(std::string configFile)
 void UgvParam::restoreDefault()
 {
     //Ugv
-    Ugv.CorrectionFile = "new_xml.txt";
+    Ugv.CorrectionFile = "/home/denggroup/UGV/bin/new_xml.txt";
 
     //Hdl
     Hdl.HdlVersion = 2;
