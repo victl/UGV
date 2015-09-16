@@ -84,13 +84,13 @@ enum PointAttrib /*: unsigned char */{
     CAMERALANELINE = 249,
     CAMERASTOPLINE = 248,
     CAMERALSINTERSECT = 247, //intersection of camera laneline and stopline. This info might be useful for Wangshy
-    AUNKNOWN = 127, // Attribute unknown
+    AUNKNOWN = 0, // Attribute unknown
 };
 
 enum PointOccupation /*: unsigned char */{
-    CLEAR = 255,//'CLEAR' means point could pass trough
-    OCCUPIED = 0,
-    OUNKNOWN = 127, // Occupation unknown
+    CLEAR = 2,//'CLEAR' means point could pass trough
+    OCCUPIED = 1,
+    OUNKNOWN = 0, // Occupation unknown
 };
 
 enum MapType /*: unsigned char*/ {
@@ -119,13 +119,13 @@ public:
 //Grid type. It is used for storing dynamic map and accumulated map infos, but not for local map
 typedef struct Grid_t{
     //the probability of occupation:
-    float p;
+//    float p;
     //highest 'z' value
     short highest;
     //lowest 'z' value
     short lowest;
     //the average height//testing
-    short average;//testing
+//    short average;//testing
     //how many points in the grid
     unsigned short pointNum;
     unsigned char HitCount;
@@ -134,18 +134,18 @@ typedef struct Grid_t{
     //attribute
     PointAttrib a;
 
-    Grid_t(){
-        p = 0.5;
-        highest = 0;
-        lowest = 0;
-        average = 0;//testing
-        pointNum = 0;
-        HitCount = 0;
-        o = OUNKNOWN;
-        a = AUNKNOWN;
-    }
+//    Grid_t(){
+//        p = 0.5;
+//        highest = 0;
+//        lowest = 0;
+//        average = 0;//testing
+//        pointNum = 0;
+//        HitCount = 0;
+//        o = OUNKNOWN;
+//        a = AUNKNOWN;
+//    }
 
-    Grid_t &operator+=(const Grid_t& other);
+//    Grid_t &operator+=(const Grid_t& other);
 }Grid;
 
 
@@ -161,6 +161,8 @@ public/*data member*/:
     double top;
     double left;
     double right;
+    double centerX;
+    double centerY;
     int maxX;
     int maxY;
 
@@ -177,11 +179,17 @@ public/*function member*/:
     //NOTE: grid's global position is on its mid-center
     cv::Point2d toGlobal(int x, int y);
 
-    //translate (x,y) to another range 'other'. values is return by oldx, oldy. if (x,y) does not fall in oldRange, return false
-    bool translate(int x, int y, Range& oldRange, int& oldx, int& oldy);
+    //translate (x,y) to another range 'other'. values is return by otherx, othery. if (x,y) does not fall in otherRange, return false
+    bool translate(int x, int y, Range& otherRange, int& otherx, int& othery);
+
+    void distanceTo(Range& otherRange, int& deltax, int& deltay);
 
     //copy assignment operator
     Range &operator=(const Range& source);
+
+    //equality operator
+    bool operator==(const Range& other);
+    bool operator!=(const Range& other);
 
     //update maxX, maxY whenever boundaries are adjusted explicitly (because they are 'public' members).
     //THIS IS VERY IMPORTANT!!!
@@ -191,6 +199,7 @@ public/*function member*/:
 //Global functions
 std::string to_string(int num);
 bool isPresent(unsigned char value, unsigned char property);
+void mergeGrid(Grid& base, Grid& addition);
 
 //define binary values of Point3B.base
 static const unsigned char ROADEDGE_UNKNOWN = 0;

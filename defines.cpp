@@ -53,13 +53,20 @@ cv::Point2d Range::toGlobal(int x, int y)
     return cv::Point2d(xx, yy);
 }
 
-bool Range::translate(int x, int y, Range &oldRange,int& oldx, int& oldy)
+bool Range::translate(int x, int y, Range &otherRange,int& otherx, int& othery)
 {
     cv::Point2d pt = this->toGlobal(x,y);
-    if(oldRange.toLocal(pt.x, pt.y, oldx, oldy)){
+    if(otherRange.toLocal(pt.x, pt.y, otherx, othery)){
         return true;
     }
     return false;
+}
+
+void Range::distanceTo(Range &otherRange, int &deltax, int &deltay)
+{
+    deltax = round((this->centerX - otherRange.centerX) * params.Scale.xScale);
+    deltay = round((this->centerY - otherRange.centerY) * params.Scale.yScale);
+    return;
 }
 
 Range &Range::operator=(const Range &source)
@@ -70,17 +77,31 @@ Range &Range::operator=(const Range &source)
     right = source.right;
     maxX = source.maxX;
     maxY = source.maxY;
+    centerX = source.centerX;
+    centerY = source.centerY;
     return *this;
+}
+
+bool Range::operator==(const Range &other)
+{
+    return ((this->centerX == other.centerX) && (this->centerY ==other.centerY));
+}
+
+bool Range::operator!=(const Range &other)
+{
+    return ((this->centerX != other.centerX) || (this->centerY !=other.centerY));
 }
 
 bool Range::update()
 {
     maxX = round((right - left) / params.Scale.GridSize);
     maxY = round((top - bottom) / params.Scale.GridSize);
+    centerX = (right + left) / 2;
+    centerY = (top + bottom) / 2;
     return true;
 }
 
-
+/*
 Grid_t &Grid_t::operator+=(const Grid_t &other)
 {
     if(abs(this->p - 0.5) < abs(other.p - 0.5) )
@@ -118,6 +139,7 @@ Grid_t &Grid_t::operator+=(const Grid_t &other)
     }
     return *this;
 }
+*/
 
 std::string to_string(int num)
 {
@@ -129,6 +151,32 @@ std::string to_string(int num)
 bool isPresent(unsigned char value, unsigned char property)
 {
     return ((value & property) == property);
+}
+
+void mergeGrid(Grid &base, Grid &addition)
+{
+    base.highest < addition.highest ? base.highest = addition.highest : NULL;
+    base.lowest > addition.lowest ? base.lowest = addition.lowest : NULL;
+    base.pointNum += addition.pointNum;
+    base.HitCount += addition.HitCount;
+
+    switch (base.a) {
+    case AUNKNOWN:
+        base.a = addition.a;
+        break;
+    case CAMERALANELINE:
+        if (CAMERASTOPLINE == addition.a) base.a = CAMERALSINTERSECT;
+        break;
+    case CAMERASTOPLINE:
+        if (CAMERALANELINE == addition.a) base.a = CAMERALSINTERSECT;
+        break;
+    default:
+        break;
+    }
+    if(base.o == OUNKNOWN)
+    {
+        base.o = addition.o;
+    }
 }
 
 }//end namespace victl

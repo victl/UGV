@@ -17,6 +17,12 @@
 
 namespace victl {
 
+//Using #define is the last choice for me, but because c++ require c arrays being defined by constant size,
+//there is no better way to do it.
+//This issue will be addressed after compiler on car upgraded to versions support c++11 standard, in which
+//case, the class 'std::array' could be used
+#define DETECT_WINDOW_SIZE 651
+
 //this enum is not used for the moment, because using them is so tiring!!!
 enum Parameter/* : unsigned char */{
     CORRECTIONFILE, HDLFORMAT
@@ -37,7 +43,7 @@ public:
         loadParam();
     }
 
-    bool loadParam(std::string configFile = "/home/denggroup/UGV/bin/ugv.conf");
+    bool loadParam(std::string configFile = "/home/victor/workspace/zoulu/ugv-share/ugv.conf");
     void restoreDefault();
     //Because many params were calculated by other params. Every time other params alterred,
     //invoking update() to set calculated value is required.

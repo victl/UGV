@@ -94,7 +94,7 @@ bool UgvParam::loadParam(std::string configFile)
 void UgvParam::restoreDefault()
 {
     //Ugv
-    Ugv.CorrectionFile = "/home/denggroup/UGV/bin/new_xml.txt";
+    Ugv.CorrectionFile = "new_xml.txt";
 
     //Hdl
     Hdl.HdlVersion = 2;
@@ -148,8 +148,8 @@ void UgvParam::update()
     Scale.yScale = 1/Scale.GridSize;
     //LocalMap
     // n times of Scale.Width
-    LocalMap.initialHeight = 3 * Scale.Width;
-    LocalMap.initialWidth = 3 * Scale.Width;
-    LocalMap.ExpandUnit = 3 * (Scale.xMax - Scale.xMin);
+    LocalMap.initialHeight = 3 * round(Scale.Width);
+    LocalMap.initialWidth = 3 * round(Scale.Width);
+    LocalMap.ExpandUnit = 3 * round(Scale.xMax - Scale.xMin);
 }
 }//end namespace victl
