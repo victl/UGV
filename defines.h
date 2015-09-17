@@ -22,6 +22,10 @@ namespace victl {
 #define LASER_NUM 64    //the total num of laser beam from the ladar is 64
 #define MAX_CLOUD_SIZE 256000    //maximum possible point number
 
+//This data is observed by calculate average z of ground points when car didn't move, unit length 1mm
+//Specific to Chang An CS35 model
+#define HDL_HEIGHT 1854
+
 //struct used to store raw hdl data
 typedef struct
 {

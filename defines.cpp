@@ -13,14 +13,14 @@ Range::Range(const UgvParam& param)
 Range::Range(const Carpose &currentPose, const UgvParam &param)
     : params(param)
 {
-    left = floor((currentPose.x + params.Scale.xMin) / params.Scale.GridSize)
-            * params.Scale.GridSize;
-    right = floor((currentPose.x + params.Scale.xMax) / params.Scale.GridSize)
-            * params.Scale.GridSize + params.Scale.GridSize;
-    bottom = floor((currentPose.y + params.Scale.xMin) / params.Scale.GridSize)
-            * params.Scale.GridSize;
-    top = floor((currentPose.y + params.Scale.xMax) / params.Scale.GridSize)
-            * params.Scale.GridSize + params.Scale.GridSize;
+    left = floor((currentPose.x + params.Scale.xMin) * params.Scale.xScale)
+            / params.Scale.xScale;
+    right = floor((currentPose.x + params.Scale.xMax) * params.Scale.xScale)
+            / params.Scale.xScale + params.Scale.GridSize;
+    bottom = floor((currentPose.y + params.Scale.xMin) * params.Scale.yScale)
+            / params.Scale.yScale;
+    top = floor((currentPose.y + params.Scale.xMax) * params.Scale.yScale)
+            / params.Scale.yScale + params.Scale.GridSize;
     update();
 }
 

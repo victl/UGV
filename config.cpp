@@ -27,6 +27,10 @@ bool UgvParam::loadParam(std::string configFile)
         ss >> value;
         if(key == "RecordLocalMap")
             Hdl.RecordLocalMap = round(value);
+        else if(key == "HdlVersion")
+            Hdl.HdlVersion = round(value);
+        else if(key == "NegHeight")
+            Hdl.NegHeight = round(value);
         else if(key == "EulrChangeThreshold")
             DivideCarTrack.EulrChangeThreshold = value;
         else if(key == "DetectPoints")
@@ -100,6 +104,7 @@ void UgvParam::restoreDefault()
     Hdl.HdlVersion = 2;
     Hdl.MaxCP = 500;
     Hdl.RecordLocalMap = true;
+    Hdl.NegHeight = -1850;
     //DivideCarTrack
     DivideCarTrack.EulrChangeThreshold = 0.005;
     DivideCarTrack.DetectPoints = 10;
@@ -128,7 +133,7 @@ void UgvParam::restoreDefault()
     ProbMap.HeightThreshold = 250;
     ProbMap.incrementUnit = 0.05;
     ProbMap.ClearThreshold = 0.3;
-    ProbMap.OccupiedThreshold = 0.7;
+    ProbMap.OccupiedThreshold = 0.2;
     ProbMap.MaxGroundHeight = -1600; //-1.6 meters
     ProbMap.MaxAvgMidDiff = 0.25;
 

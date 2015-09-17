@@ -17,12 +17,6 @@
 
 namespace victl {
 
-//Using #define is the last choice for me, but because c++ require c arrays being defined by constant size,
-//there is no better way to do it.
-//This issue will be addressed after compiler on car upgraded to versions support c++11 standard, in which
-//case, the class 'std::array' could be used
-#define DETECT_WINDOW_SIZE 651
-
 //this enum is not used for the moment, because using them is so tiring!!!
 enum Parameter/* : unsigned char */{
     CORRECTIONFILE, HDLFORMAT
@@ -64,6 +58,8 @@ private:
         //maximum camera points
         unsigned short MaxCP;
         bool RecordLocalMap;
+        //Negtive height of LiDAR, used as a threshold to distinguish ground points
+        int NegHeight;
     };
 
 //DivideCarTrack
@@ -114,7 +110,7 @@ private:
         //probability increment unit
         float incrementUnit;
         //Point type probability threshold
-        unsigned char OccupiedThreshold;
+        float OccupiedThreshold;
         float ClearThreshold;
         short MaxGroundHeight;
         float MaxAvgMidDiff;
