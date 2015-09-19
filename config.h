@@ -12,33 +12,19 @@
 #define CONFIG_H
 
 #include <string>
+#include <vector>
 #include <set>
-#include <map>
 
 namespace victl {
-
-//this enum is not used for the moment, because using them is so tiring!!!
-enum Parameter/* : unsigned char */{
-    CORRECTIONFILE, HDLFORMAT
-    , EULRCHANGETHRESHOLD, DETECTPOINTS, DETECTDISTANCE, VALIDSEGMENTPOINTSNUM
-    , SIMILAREULRTHRESHOLD
-    , SAMEDIRECTIONTHRESHOLD, LATERALDISTANCETHRESHOLD
-    , XMIN, XMAX, YMIN, YMAX, GRIDSIZE, PIXELPERGRID, WIDTH, XSCALE, YSCALE
-    , LEFTDETECTANGLEBOUNDARY, RIGHTDETECTANGLEBOUNDARY, UNITHEIGHT, HEIGHTTHRESHOLD, INCREMENTUNIT
-    , OCCUPIEDTHRESHOLD, CLEARTHRESHOLD, MAXGROUNDHEIGHT, MAXAVGMIDDIFF
-    , INITIALWIDTH, INITIALHEIGHT, EXPANDUNIT, SAVEINTERVAL, SAVENEEDED
-};
 
 class UgvParam {
 public:
     UgvParam()
     {
-        restoreDefault();
         loadParam();
     }
 
     bool loadParam(std::string configFile = "/home/victor/workspace/zoulu/ugv-share/ugv.conf");
-    void restoreDefault();
     //Because many params were calculated by other params. Every time other params alterred,
     //invoking update() to set calculated value is required.
     void update();
@@ -54,7 +40,7 @@ private:
         //Version 1: points doesn't contain xyzs
         //Version 2: points contain xyzs, car coordinate. Since version 2, camera points were added.
         //Version 3: points contain xyzs, global coordinate
-        unsigned char HdlVersion;
+        unsigned short HdlVersion;
         //maximum camera points
         unsigned short MaxCP;
         bool RecordLocalMap;
@@ -104,7 +90,7 @@ private:
         //right detect angle
         unsigned short RightDetectAngleBoundary;
         //height increment unit
-        unsigned char unitHeight;
+        unsigned short unitHeight;
         //height threshold
         unsigned short HeightThreshold;
         //probability increment unit

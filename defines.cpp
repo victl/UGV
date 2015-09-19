@@ -155,6 +155,11 @@ bool isPresent(unsigned char value, unsigned char property)
 
 void mergeGrid(Grid &base, Grid &addition)
 {
+#ifdef OFFLINE
+    base.iaverage = (base.iaverage * base.nzPointNum + addition.iaverage * addition.nzPointNum) / (base.nzPointNum + addition.nzPointNum);
+    base.zaverage = (base.zaverage * base.pointNum + addition.zaverage * addition.pointNum) / (base.pointNum + addition.pointNum);
+    base.nzPointNum += addition.nzPointNum;
+#endif
     base.highest < addition.highest ? base.highest = addition.highest : NULL;
     base.lowest > addition.lowest ? base.lowest = addition.lowest : NULL;
     base.pointNum += addition.pointNum;

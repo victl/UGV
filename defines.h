@@ -128,8 +128,6 @@ typedef struct Grid_t{
     short highest;
     //lowest 'z' value
     short lowest;
-    //the average height//testing
-//    short average;//testing
     //how many points in the grid
     unsigned short pointNum;
     unsigned char HitCount;
@@ -137,7 +135,12 @@ typedef struct Grid_t{
     PointOccupation o;
     //attribute
     PointAttrib a;
-
+#ifdef OFFLINE
+    float zaverage;
+    float iaverage;
+    //intensity non-zero point count
+    unsigned short nzPointNum;
+#endif
 //    Grid_t(){
 //        p = 0.5;
 //        highest = 0;
