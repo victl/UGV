@@ -10,6 +10,7 @@
 #include <opencv/cv.hpp>
 #include <opencv2/opencv.hpp>
 #include <glog/logging.h>
+#include <boost/optional.hpp>
 #include "config.h"
 
 #ifndef DEFINES_H
@@ -180,6 +181,7 @@ public/*function member*/:
     //translate global coordinate to local coordinate (origin at bottom-left corner of the range)
     //It returns false if the point fall outside the range
     bool toLocal(const double x, const double y, int &retX, int &retY);
+    boost::optional<cv::Point2i> toLocal(const double x, const double y);
 
     //translate local coordinate to global.
     //and returns the result coordinate as a cv::Point2d.
@@ -188,6 +190,7 @@ public/*function member*/:
 
     //translate (x,y) to another range 'other'. values is return by otherx, othery. if (x,y) does not fall in otherRange, return false
     bool translate(int x, int y, Range& otherRange, int& otherx, int& othery);
+    boost::optional<cv::Point2i> translateTo(int x, int y, Range &otherRange);
 
     void distanceTo(Range& otherRange, int& deltax, int& deltay);
 

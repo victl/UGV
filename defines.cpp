@@ -46,6 +46,20 @@ bool Range::toLocal(const double x, const double y, int &retX, int &retY)
     return true;
 }
 
+boost::optional<cv::Point2i> Range::toLocal(const double x, const double y)
+{
+    if(!this->contains(x,y))
+    {
+        return boost::none;
+    }
+    boost::optional<cv::Point2i> pt;
+    pt->x = floor( (x - left) / params.Scale.GridSize);
+    if(pt->x == maxX) --pt->x;
+    pt->y = floor( (y - bottom) / params.Scale.GridSize);
+    if(pt->y == maxY) --pt->y;
+    return pt;
+}
+
 cv::Point2d Range::toGlobal(int x, int y)
 {
     double xx = left + (x + 0.5) * params.Scale.GridSize;
@@ -60,6 +74,16 @@ bool Range::translate(int x, int y, Range &otherRange,int& otherx, int& othery)
         return true;
     }
     return false;
+}
+
+boost::optional<cv::Point2i> Range::translateTo(int x, int y, Range &otherRange)
+{
+    cv::Point2d pt = this->toGlobal(x,y);
+    boost::optional<cv::Point2i> p = otherRange.toLocal(pt.x, pt.y);
+    if(p){
+        return p;
+    }
+    return boost::none;
 }
 
 void Range::distanceTo(Range &otherRange, int &deltax, int &deltay)
