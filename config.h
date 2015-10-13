@@ -24,7 +24,11 @@ public:
         loadParam();
     }
 
-    bool loadParam(std::string configFile = "/home/victor/workspace/zoulu/ugv-share/ugv.conf");
+#ifndef ONCAR
+    bool loadParam(std::string configFile = "/home/victor/workspace/ugv/bin/ugv.conf");
+#else
+    bool loadParam(std::string configFile = "/home/denggroup/UGV/bin/ugv.conf");
+#endif
     //Because many params were calculated by other params. Every time other params alterred,
     //invoking update() to set calculated value is required.
     void update();
@@ -46,6 +50,7 @@ private:
         bool RecordLocalMap;
         //Negtive height of LiDAR, used as a threshold to distinguish ground points
         int NegHeight;
+        int Ceiling;
     };
 
 //DivideCarTrack
